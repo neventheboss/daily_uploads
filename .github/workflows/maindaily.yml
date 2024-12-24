@@ -22,5 +22,3 @@ jobs:
         git add daily_uploads/
         git commit -m "Daily upload for $TODAY"
         git push
-
-Add daily upload workflow
