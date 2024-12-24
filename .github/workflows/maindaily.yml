@@ -1,8 +1,10 @@
 name: Daily Upload
 
 on:
+  workflow_dispatch: # Permet le déclenchement manuel
   schedule:
-    - cron: '0 0 * * *' # Exécuter à minuit UTC tous les jours
+    - cron: '0 0 * * *' # Exécution automatique quotidienne
+
 
 jobs:
   upload:
