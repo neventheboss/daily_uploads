@@ -1,8 +1,9 @@
 name: Daily Upload
 
 on:
+  workflow_dispatch: # Permet le déclenchement manuel
   schedule:
-    - cron: '0 0 * * *' # Exécuter à minuit UTC tous les jours
+    - cron: '0 0 * * *' # Exécution quotidienne à minuit UTC
 
 jobs:
   upload:
@@ -12,13 +13,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Generate or upload file
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Generate daily file
       run: |
         mkdir -p daily_uploads
         TODAY=$(date +%Y-%m-%d)
         echo "File created on $TODAY" > daily_uploads/file-$TODAY.txt
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push changes
+      run: |
         git add daily_uploads/
-        git commit -m "Daily upload for $TODAY"
+        git commit -m "Daily upload for $TODAY" || echo "No changes to commit"
         git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
