@@ -15,19 +15,20 @@ jobs:
 
     - name: Configure git
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "neventheboss"
+        git config user.email "nev3562@gmail.com"
 
     - name: Generate daily file
       run: |
         mkdir -p daily_uploads
         TODAY=$(date +%Y-%m-%d)
-        echo "File created on $TODAY" > daily_uploads/file-$TODAY.txt
+        NOW=$(date +%H:%M:%S)
+        echo "File created on $TODAY at $NOW" > daily_uploads/file-$TODAY.txt
 
     - name: Commit and push changes
       run: |
         git add daily_uploads/
         git commit -m "Daily upload for $TODAY" || echo "No changes to commit"
-        git push
+        git push origin main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
